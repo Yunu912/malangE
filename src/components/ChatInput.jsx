@@ -1,0 +1,2 @@
+import { useState } from 'react';
+export default function ChatInput({ onSend }) { const [value, setValue] = useState(''); const submit = async (event) => { event.preventDefault(); if (!value.trim()) return; await onSend(value); setValue(''); }; return <form className="chat-input" onSubmit={submit}><input value={value} onChange={(event) => setValue(event.target.value)} placeholder="메시지를 입력하세요" /><button>↑</button></form>; }

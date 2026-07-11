@@ -1,0 +1,3 @@
+import { Link } from '../router';
+import ToyArt from './ToyArt';
+export default function TradeCard({ trade, onRequest }) { return <article className="trade-card"><Link to={`/trades/${trade.id}`}><ToyArt mallang={trade.mallang} /></Link><div className="trade-info"><div><span className={`status ${trade.status === '거래중' ? 'muted' : ''}`}>{trade.status}</span><span className="time">{trade.createdAt}</span></div><h2>내 <b>{trade.mallang.name}</b>과(와)<br /><strong>{trade.wanted}</strong> 교환해요!</h2><p>📍 {trade.location} · {trade.writer}</p></div><button className="request" type="button" onClick={() => onRequest(trade)}>교환 요청 <span>→</span></button></article>; }

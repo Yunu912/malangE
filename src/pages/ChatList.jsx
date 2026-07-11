@@ -1,0 +1,5 @@
+import { useEffect, useState } from 'react';
+import { Link } from '../router';
+import { getChatRooms } from '../api/tradeApi';
+
+export default function ChatList() { const [rooms, setRooms] = useState([]); const [error, setError] = useState(''); useEffect(() => { getChatRooms(localStorage.getItem('userId')).then(setRooms).catch((err) => setError(err.message)); }, []); return <main className="chat-list-page"><p className="eyebrow">MY EXCHANGE CHATS</p><h1>교환 채팅</h1><p className="chat-list-lead">교환 요청한 상대와 나눈 대화를 보관합니다.</p>{error && <p className="trade-error">{error}</p>}{rooms.length === 0 ? <p className="trade-empty">보관된 교환 채팅이 없습니다.</p> : <div className="room-list">{rooms.map((room) => <Link className="room-card" key={room.id} to={`/chat/${room.id}`}><span className="mini-avatar">{room.other_user.slice(0, 1)}</span><div><b>{room.other_user}</b><strong>{room.trade_name} 교환</strong><p>{room.last_message || '새로운 교환 채팅이 시작되었어요.'}</p></div><small>{new Date(room.created_at).toLocaleDateString('ko-KR')}</small></Link>)}</div>}</main>; }

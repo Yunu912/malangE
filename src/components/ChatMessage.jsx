@@ -1,0 +1,1 @@
+export default function ChatMessage({ message }) { return <div className={`message ${message.sender_id === Number(localStorage.getItem('userId')) ? 'mine' : ''}`}><span>{message.message}</span><small>{new Date(message.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</small></div>; }

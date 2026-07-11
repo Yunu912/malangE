@@ -1,0 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
+import { Link, useParams } from '../router';
+import { getMessages, sendMessage } from '../api/tradeApi';
+import ChatInput from '../components/ChatInput';
+import ChatMessage from '../components/ChatMessage';
+export default function Chat() { const { id } = useParams(); const [messages, setMessages] = useState([]); const [error, setError] = useState(''); const bottom = useRef(null); const userId = Number(localStorage.getItem('userId')); useEffect(() => { getMessages(id).then(setMessages).catch((err) => setError(err.message)); }, [id]); useEffect(() => { bottom.current?.scrollIntoView(); }, [messages]); const send = async (message) => { try { const saved = await sendMessage(id, message, userId); setMessages((items) => [...items, saved]); } catch (err) { setError(err.message); } }; return <main className="chat-page"><Link className="back" to="/trades">← 게시판으로</Link><section className="chat"><div className="chat-head"><span className="mini-avatar">몽</span><div><b>게시글 작성자와 교환 채팅</b><small>교환 장소와 말랑이 상태를 문의해 보세요.</small></div></div><div className="chat-body">{error ? <p className="trade-empty">{error}</p> : messages.map((message) => <ChatMessage key={message.id} message={message} />)}<div ref={bottom} /></div><ChatInput onSend={send} /></section></main>; }

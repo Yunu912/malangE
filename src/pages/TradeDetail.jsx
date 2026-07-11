@@ -1,0 +1,6 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from '../router';
+import { getTrade, requestTrade } from '../api/tradeApi';
+import ToyArt from '../components/ToyArt';
+
+export default function TradeDetail() { const { id } = useParams(); const navigate = useNavigate(); const [trade, setTrade] = useState(null); const [error, setError] = useState(''); useEffect(() => { getTrade(id).then(setTrade).catch((err) => setError(err.message)); }, [id]); if (error) return <main className="placeholder"><p>{error}</p><Link className="back" to="/trades">← 게시판으로</Link></main>; if (!trade) return <main>교환 글을 불러오는 중이에요.</main>; return <main className="detail"><Link className="back" to="/trades">← 게시판으로</Link><div className="detail-layout"><ToyArt mallang={trade.mallang} large /><div className="detail-copy"><span className="tag">{trade.mallang.category}</span><h1>{trade.mallang.name}</h1><p>{trade.description || '등록된 설명이 없어요.'}</p><dl><div><dt>원하는 말랑이</dt><dd>{trade.wanted}</dd></div><div><dt>거래 위치</dt><dd>{trade.location}</dd></div><div><dt>상태</dt><dd>{trade.status}</dd></div></dl><button className="primary" onClick={async () => navigate(`/chat/${(await requestTrade(trade.id, localStorage.getItem('userId'))).id}`)}>교환 요청하기 →</button></div></div></main>; }
